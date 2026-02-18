@@ -6,6 +6,7 @@ import axios from "axios"
 export default function NavBar() {
   const [logged, setLogged] = useState(false)
   const [cartCount, setCartCount] = useState(0)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     const accountId = sessionStorage.getItem("account_id")
@@ -15,7 +16,7 @@ export default function NavBar() {
       axios
         .get(`http://localhost:3000/cart/${accountId}`)
         .then(res => {
-          setCartCount(res.data.items.length) // or res.data.length
+          setCartCount(res.data.items.length)
         })
         .catch(console.error)
     }
@@ -23,17 +24,25 @@ export default function NavBar() {
 
   return (
     <section className="nav-container">
-      <nav className="nav-links">
-        <NavLink to="/home">Home</NavLink>
-        <NavLink to="/products">Products</NavLink>
+      {/* Hamburger */}
+      <button
+        className="hamburger"
+        onClick={() => setMenuOpen(!menuOpen)}
+      >
+        ☰
+      </button>
+
+      <nav className={`nav-links ${menuOpen ? "open" : ""}`}>
+        <NavLink to="/home" onClick={() => setMenuOpen(false)}>Home</NavLink>
+        <NavLink to="/products" onClick={() => setMenuOpen(false)}>Products</NavLink>
 
         {logged ? (
-          <NavLink to="/profile">Account</NavLink>
+          <NavLink to="/account" onClick={() => setMenuOpen(false)}>Account</NavLink>
         ) : (
-          <NavLink to="/login">Login</NavLink>
+          <NavLink to="/login" onClick={() => setMenuOpen(false)}>Login</NavLink>
         )}
 
-        <NavLink to="/cart" className="cart-link">
+        <NavLink to="/cart" className="cart-link" onClick={() => setMenuOpen(false)}>
           <img src="/cart.svg" alt="Cart" className="cart-icons" />
           {cartCount > 0 && (
             <span className="cart-badge">{cartCount}</span>

@@ -14,6 +14,12 @@ export class AccountController{
   private readonly tokenService: AccountTokenService,
 ) {}
 
+@Get(':id')
+getAccountById(@Param('id') id: number) {
+  return this.accountService.getAccountById(id);
+}
+
+
 @Post('register')
 createProfile(@Body() dto: CreateAccountDto){
     return this.accountService.createProfile(dto)

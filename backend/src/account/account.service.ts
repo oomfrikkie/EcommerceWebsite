@@ -121,6 +121,20 @@ export class AccountService {
       throw new BadRequestException('Login succeeded but failed to update account state.',);
     }
   }
+async getAccountById(id: number) {
+  const account = await this.accountRepo.findOne({
+    where: { id },
+    select: ['id', 'first_name', 'last_name', 'email'],
+  });
+
+  if (!account) {
+    throw new NotFoundException('Account not found');
+  }
+
+  return account;
+}
+
+
 
 
 

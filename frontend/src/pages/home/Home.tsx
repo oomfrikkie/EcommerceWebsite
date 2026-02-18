@@ -1,5 +1,4 @@
-import { useState } from "react";
-import axios from "axios";
+// ...existing code...
 import HeroBanner from "../../components/herobanner/HeroBanner";
 import './home.css'
 import ProductScroller from "../../components/product-scroller/ProductScroller";

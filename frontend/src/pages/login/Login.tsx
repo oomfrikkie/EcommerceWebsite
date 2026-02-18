@@ -29,7 +29,7 @@ sessionStorage.setItem("email", res.data.email);
       
 
       navigate("/home");
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
       setError(err.response?.data?.message || "Login failed");
     } finally {

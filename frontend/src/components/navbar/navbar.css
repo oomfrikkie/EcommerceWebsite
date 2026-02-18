@@ -1,3 +1,22 @@
+header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+}
+
+h1 {
+  font-size: 2rem;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+  h1 {
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+  }
+}
 a {
   color: var(--text);
   text-decoration: none;
@@ -34,3 +53,52 @@ a:active{
 }
 
 
+.hamburger {
+  display: none;
+}
+
+/* PHONE */
+@media (max-width: 600px) {
+  .hamburger {
+    display: block;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    gap: 1.2rem;
+    background: #fff;
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 70vw;
+    max-width: 320px;
+    padding: 2rem 1.5rem 1.5rem 1.5rem;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    border-radius: 0 0 0 16px;
+    align-items: flex-end;
+    z-index: 1000;
+  }
+
+  .nav-links.open {
+    display: flex;
+  }
+
+  .nav-links a {
+    color: var(--text);
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    text-align: right;
+  }
+
+
+  /* Disable hover lift on mobile (feels weird on touch) */
+  a:hover {
+    transform: none;
+  }
+}

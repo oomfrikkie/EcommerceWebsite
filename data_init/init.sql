@@ -98,15 +98,41 @@ CREATE TABLE IF NOT EXISTS cart_items (
     CONSTRAINT fk_cart_items_cart
         FOREIGN KEY (cart_id)
         REFERENCES cart(id)
+        ON DELETE CASCADE
+);
+
+-- =====================================================
+-- ORDERS
+-- =====================================================
+CREATE TABLE IF NOT EXISTS orders (
+    id SERIAL PRIMARY KEY,
+    amount NUMERIC(10,2) NOT NULL,
+    account_id INTEGER NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_orders_account
+        FOREIGN KEY (account_id)
+        REFERENCES accounts(id)
+        ON DELETE CASCADE
+);
+
+-- =====================================================
+-- ORDER ↔ PRODUCT (MANY TO MANY)
+-- =====================================================
+CREATE TABLE IF NOT EXISTS order_products (
+    order_id INTEGER NOT NULL,
+    product_id INTEGER NOT NULL,
+    quantity INTEGER NOT NULL DEFAULT 1,
+    PRIMARY KEY (order_id, product_id),
+    CONSTRAINT fk_order_products_order
+        FOREIGN KEY (order_id)
+        REFERENCES orders(id)
         ON DELETE CASCADE,
-    CONSTRAINT fk_cart_items_product
+    CONSTRAINT fk_order_products_product
         FOREIGN KEY (product_id)
         REFERENCES products(id)
         ON DELETE CASCADE
 );
 
--- =====================================================
--- SEED CATEGORIES
 -- =====================================================
 INSERT INTO categories (name) VALUES
 ('Clothing'),

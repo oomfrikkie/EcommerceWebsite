@@ -9,6 +9,7 @@ import VerifyAccount from './pages/verify/Verify';
 import Cart from './pages/cart/Cart';
 import Product from './pages/product/Product';
 import SearchResults from './pages/searchresults/SearchReults';
+import Account from './account/Account';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           <Route path ="/cart" element={<Cart />}/>
           <Route path ="/product/:id" element={<Product />}/>
           <Route path="/search" element={<SearchResults />} />
+          <Route path='/account' element={<Account />} />
         </Routes>
       </main>
 

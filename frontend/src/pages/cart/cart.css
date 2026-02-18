@@ -128,3 +128,21 @@
   font-size: 1.5rem;
   color: #333;
 }
+
+.pay-button {
+  margin-top: 0.5rem;
+  padding: 0.75rem;
+  width: 100%;
+  border-radius: 8px;
+  border: none;
+  background: #6366f1;
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.pay-button:hover {
+  background: #4f46e5;
+}

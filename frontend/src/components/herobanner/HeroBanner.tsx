@@ -1,4 +1,4 @@
-import "./heroBanner.css";
+import "./herobanner.css";
 
 export default function HeroBanner() {
   return (

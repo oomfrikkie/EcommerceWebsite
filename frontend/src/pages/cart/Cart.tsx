@@ -23,6 +23,7 @@ export default function Cart() {
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  
 
   const handleDelete = async (cartItemId: number) => {
     try {
@@ -51,6 +52,7 @@ export default function Cart() {
       try {
         const res = await axios.get(`http://localhost:3000/cart/${accountId}`, { timeout: 5000 });
         setCart(res.data);
+        
       } catch (err) {
         console.error(err);
         setError("Failed to load cart");
@@ -62,14 +64,42 @@ export default function Cart() {
     fetchCart();
   }, []);
 
+  const handleCheckout = async () => {
+    if (!cart || !cart.items.length) return;
+    const accountId = sessionStorage.getItem("account_id");
+    if (!accountId) {
+      setError("Please log in to checkout");
+      return;
+    }
+    const orderPayload = {
+      account_id: parseInt(accountId, 10),
+      amount: total,
+      products: cart.items.map(item => ({
+        product_id: item.product.id,
+        quantity: item.quantity
+      }))
+    };
+    try {
+      await axios.post("http://localhost:3000/orders", orderPayload, { timeout: 5000 });
+      // Optionally clear cart or refetch
+      setCart({ ...cart, items: [] });
+      setError("");
+      alert("Order placed successfully!");
+    } catch (err) {
+      console.error(err);
+      setError("Failed to place order");
+    }
+  }
   const total = cart?.items?.reduce((sum, item) => sum + (parseFloat(item.product.price) * item.quantity), 0) || 0;
 
   return (
     <section className='cart-section'>
       <div className='cart-container'>
         <h1>Your Cart</h1>
+        {loading && <p>Loading...</p>}
+        {error && <p className='cart-error'>{error}</p>}
         <div className='cart-list'>
-          {cart?.items?.length > 0 ? (
+          {cart?.items?.length && cart.items.length > 0 ? (
             cart.items.map((item) => (
               <div key={item.id} className='cart-item'>
                 <div className='item-info'>
@@ -92,12 +122,13 @@ export default function Cart() {
               </div>
             ))
           ) : (
-            <p>Your cart is empty</p>
+            !loading && <p>Your cart is empty</p>
           )}
         </div>
-        {cart?.items?.length > 0 && (
+        {cart?.items?.length && cart.items.length > 0 && (
           <div className='cart-total'>
             <h3>Total: ${total.toFixed(2)}</h3>
+            <button className="pay-button" onClick={handleCheckout}>Pay</button>
           </div>
         )}
       </div>
