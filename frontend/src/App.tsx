@@ -31,6 +31,7 @@ function App() {
           <Route path ="/product/:id" element={<Product />}/>
           <Route path="/search" element={<SearchResults />} />
           <Route path='/account' element={<Account />} />
+          <p>hi</p>
         </Routes>
       </main>
 
