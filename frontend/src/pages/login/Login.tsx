@@ -1,7 +1,7 @@
 import { useState } from "react";
 import './login.css';
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -24,8 +24,9 @@ export default function Login() {
 
       console.log("Successfully logged in", res.data);
 
-    sessionStorage.setItem("account_id", String(res.data.account_id));
-sessionStorage.setItem("email", res.data.email);
+      sessionStorage.setItem("account_id", String(res.data.account_id));
+      sessionStorage.setItem("email", res.data.email);
+      window.dispatchEvent(new Event("auth:updated"));
       
 
       navigate("/home");
@@ -57,6 +58,10 @@ sessionStorage.setItem("email", res.data.email);
         <button onClick={handleLogin} disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </button>
+
+        <p className="register-hint">
+          New to this place? <Link to="/register">Register here</Link>
+        </p>
       </div>
     </section>
   );

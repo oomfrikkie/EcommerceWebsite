@@ -1,0 +1,143 @@
+.checkout-section {
+  min-height: 50vh;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.checkout-container {
+  width: 100%;
+  max-width: 1000px;
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.checkout-container h1 {
+  text-align: center;
+  margin: 0 0 1rem;
+  font-weight: 600;
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.order-card,
+.payment-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 1rem;
+  background: #fff;
+}
+
+.order-card h2,
+.payment-card h2 {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+}
+
+.order-list {
+  max-height: 340px;
+  overflow-y: auto;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid #eee;
+  padding: 0.75rem 0;
+}
+
+.order-item:last-child {
+  border-bottom: none;
+}
+
+.order-item-text h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+
+.order-item-text p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.order-item-price {
+  font-weight: 600;
+  margin: 0;
+  align-self: center;
+}
+
+.order-total {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.payment-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.payment-card label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.95rem;
+}
+
+.payment-card input {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.6rem;
+  font-size: 0.95rem;
+}
+
+.payment-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.checkout-button {
+  margin-top: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem;
+  background: #dc3545;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.checkout-button:hover {
+  background: #c82333;
+}
+
+.checkout-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.checkout-error {
+  color: #dc3545;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 900px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+}

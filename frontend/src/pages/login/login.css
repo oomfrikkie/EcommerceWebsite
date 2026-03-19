@@ -1,0 +1,16 @@
+.register-hint {
+	margin-top: 0.75rem;
+	text-align: center;
+	font-size: 0.95rem;
+	color: #555;
+}
+
+.register-hint a {
+	color: #dc3545;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.register-hint a:hover {
+	text-decoration: underline;
+}

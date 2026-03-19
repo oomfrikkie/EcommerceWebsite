@@ -36,6 +36,7 @@ export default function Product() {
         productId: product.id,
         quantity: 1,
       });
+      window.dispatchEvent(new Event("cart:updated"));
       alert("Added to cart!");
     } catch (error) {
       console.error(error);

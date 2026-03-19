@@ -8,23 +8,48 @@ export default function NavBar() {
   const [cartCount, setCartCount] = useState(0)
   const [menuOpen, setMenuOpen] = useState(false)
 
-  useEffect(() => {
+  const fetchCartCount = async () => {
     const accountId = sessionStorage.getItem("account_id")
     setLogged(!!accountId)
 
-    if (accountId) {
-      axios
-        .get(`http://localhost:3000/cart/${accountId}`)
-        .then(res => {
-          setCartCount(res.data.items.length)
-        })
-        .catch(console.error)
+    if (!accountId) {
+      setCartCount(0)
+      return
+    }
+
+    try {
+      const res = await axios.get(`http://localhost:3000/cart/${accountId}`)
+      const items = Array.isArray(res.data?.items) ? res.data.items : []
+
+      const totalQuantity = items.reduce(
+        (sum: number, item: { quantity?: number }) => sum + (item.quantity ?? 0),
+        0
+      )
+
+      setCartCount(totalQuantity)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchCartCount()
+
+    const handleCartUpdate = () => {
+      fetchCartCount()
+    }
+
+    window.addEventListener("cart:updated", handleCartUpdate)
+    const intervalId = setInterval(fetchCartCount, 5000)
+
+    return () => {
+      window.removeEventListener("cart:updated", handleCartUpdate)
+      clearInterval(intervalId)
     }
   }, [])
 
   return (
     <section className="nav-container">
-      {/* Hamburger */}
       <button
         className="hamburger"
         onClick={() => setMenuOpen(!menuOpen)}

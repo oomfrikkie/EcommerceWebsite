@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import './cart.css'
 
 interface CartItem {
@@ -20,6 +21,7 @@ interface Cart {
 }
 
 export default function Cart() {
+  const navigate = useNavigate();
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -33,6 +35,7 @@ export default function Cart() {
       if (accountId) {
         const res = await axios.get(`http://localhost:3000/cart/${accountId}`, { timeout: 5000 });
         setCart(res.data);
+        window.dispatchEvent(new Event("cart:updated"));
       }
     } catch (err) {
       console.error(err);
@@ -64,32 +67,6 @@ export default function Cart() {
     fetchCart();
   }, []);
 
-  const handleCheckout = async () => {
-    if (!cart || !cart.items.length) return;
-    const accountId = sessionStorage.getItem("account_id");
-    if (!accountId) {
-      setError("Please log in to checkout");
-      return;
-    }
-    const orderPayload = {
-      account_id: parseInt(accountId, 10),
-      amount: total,
-      products: cart.items.map(item => ({
-        product_id: item.product.id,
-        quantity: item.quantity
-      }))
-    };
-    try {
-      await axios.post("http://localhost:3000/orders", orderPayload, { timeout: 5000 });
-      // Optionally clear cart or refetch
-      setCart({ ...cart, items: [] });
-      setError("");
-      alert("Order placed successfully!");
-    } catch (err) {
-      console.error(err);
-      setError("Failed to place order");
-    }
-  }
   const total = cart?.items?.reduce((sum, item) => sum + (parseFloat(item.product.price) * item.quantity), 0) || 0;
 
   return (
@@ -128,7 +105,7 @@ export default function Cart() {
         {cart?.items?.length && cart.items.length > 0 && (
           <div className='cart-total'>
             <h3>Total: ${total.toFixed(2)}</h3>
-            <button className="pay-button" onClick={handleCheckout}>Pay</button>
+            <button className="pay-button" onClick={() => navigate('/checkout')}>Pay</button>
           </div>
         )}
       </div>
