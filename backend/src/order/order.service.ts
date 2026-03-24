@@ -80,12 +80,18 @@ export class OrderService{
     }
 
 
-    async getAllOrders() {
-        return this.orderRepo.find({
-            relations: ['account', 'products'],
-            order: { created_at: 'DESC' },
-        });
+async getAllOrders() {
+    const orders = await this.orderRepo.find({
+        relations: ['account', 'products'],
+        order: { created_at: 'DESC' },
+    });
+
+    if (orders.length === 0) {
+        throw new NotFoundException('No orders have been made');
     }
+
+    return orders;
+}
 
 
     async getOrderByAccount(account_id: number) {

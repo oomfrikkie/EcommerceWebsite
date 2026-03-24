@@ -11,6 +11,7 @@ import Checkout from './pages/checkout/Checkout';
 import Product from './pages/product/Product';
 import SearchResults from './pages/searchresults/SearchReults';
 import Account from './pages/account/Account';
+import Admin from './pages/admin/Admin';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route path ="/product/:id" element={<Product />}/>
           <Route path="/search" element={<SearchResults />} />
           <Route path='/account' element={<Account />} />
+          <Route path='/admin' element={<Admin/>}/>
         </Routes>
       </main>
 
