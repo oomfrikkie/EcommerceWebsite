@@ -12,6 +12,7 @@ import Product from './pages/product/Product';
 import SearchResults from './pages/searchresults/SearchReults';
 import Account from './pages/account/Account';
 import Admin from './pages/admin/Admin';
+import Chat from './components/chat/Chat';
 
 function App() {
   return (
@@ -41,6 +42,8 @@ function App() {
       <footer>
         <p>footer</p>
       </footer>
+
+      <Chat />
     </>
   );
 }

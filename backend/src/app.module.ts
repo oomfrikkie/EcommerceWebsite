@@ -13,6 +13,7 @@ import { CartModule } from './cart/cart.module';
 import { Cart } from './cart/cart.entity';
 
 import { OrderModule } from './order/order.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -49,7 +50,7 @@ import { OrderModule } from './order/order.module';
     ProductModule,
     CartModule,
     OrderModule,
-    
+    ChatModule,
 
   ],
   controllers: [AppController],

@@ -19,6 +19,13 @@ export class Order {
   @Column({ type: 'numeric', precision: 10, scale: 2 })
   amount: number;
 
+  @Column({
+    type: 'enum',
+    enum: ['pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled'],
+    default: 'pending',
+  })
+  status: string;
+
   @Column()
   account_id: number;
 
