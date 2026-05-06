@@ -1,16 +1,10 @@
-.register-hint {
-	margin-top: 0.75rem;
-	text-align: center;
-	font-size: 0.95rem;
-	color: #555;
+.auth-logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--color-primary);
+  text-align: center;
+  margin-bottom: 1.25rem;
 }
 
-.register-hint a {
-	color: #dc3545;
-	font-weight: 600;
-	text-decoration: none;
-}
-
-.register-hint a:hover {
-	text-decoration: underline;
-}
+.auth-logo span { color: var(--color-accent); }
