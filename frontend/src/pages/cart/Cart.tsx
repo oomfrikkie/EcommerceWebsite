@@ -1,17 +1,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import './cart.css'
+import { useNavigate, Link } from "react-router-dom";
+import "./cart.css";
 
 interface CartItem {
   id: number;
-  product: {
-    id: number;
-    title: string;
-    brand: string;
-    description: string;
-    price: string;
-  };
+  product: { id: number; title: string; brand: string; price: string; image_url?: string };
   quantity: number;
 }
 
@@ -25,90 +19,136 @@ export default function Cart() {
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+  const [deletingId, setDeletingId] = useState<number | null>(null);
 
-  const handleDelete = async (cartItemId: number) => {
+  const accountId = sessionStorage.getItem("account_id");
+
+  const fetchCart = async () => {
+    if (!accountId) { setLoading(false); return; }
     try {
-      await axios.delete(`http://localhost:3000/cart/item/${cartItemId}`);
-      // Refetch cart
-      const accountId = sessionStorage.getItem("account_id");
-      if (accountId) {
-        const res = await axios.get(`http://localhost:3000/cart/${accountId}`, { timeout: 5000 });
-        setCart(res.data);
-        window.dispatchEvent(new Event("cart:updated"));
-      }
+      const res = await axios.get(`http://localhost:3000/cart/${accountId}`, { timeout: 5000 });
+      setCart(res.data);
     } catch (err) {
       console.error(err);
-      setError("Failed to delete item");
+      setError("Failed to load cart");
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    const fetchCart = async () => {
-      const accountId = sessionStorage.getItem("account_id");
-      if (!accountId) {
-        setError("Please log in to view your cart");
-        setLoading(false);
-        return;
-      }
+  useEffect(() => { fetchCart(); }, []);
 
-      try {
-        const res = await axios.get(`http://localhost:3000/cart/${accountId}`, { timeout: 5000 });
-        setCart(res.data);
-        
-      } catch (err) {
-        console.error(err);
-        setError("Failed to load cart");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const handleDelete = async (cartItemId: number) => {
+    setDeletingId(cartItemId);
+    try {
+      await axios.delete(`http://localhost:3000/cart/item/${cartItemId}`);
+      await fetchCart();
+      window.dispatchEvent(new Event("cart:updated"));
+    } catch (err) {
+      console.error(err);
+      setError("Failed to remove item");
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
-    fetchCart();
-  }, []);
+  const total = cart?.items?.reduce(
+    (sum, item) => sum + parseFloat(item.product.price) * item.quantity, 0
+  ) ?? 0;
 
-  const total = cart?.items?.reduce((sum, item) => sum + (parseFloat(item.product.price) * item.quantity), 0) || 0;
+  const itemCount = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) ?? 0;
+
+  if (!accountId) {
+    return (
+      <div className="cart-page">
+        <div className="container">
+          <div className="empty-state">
+            <p>Please <Link to="/login" style={{ color: "var(--color-accent)" }}>log in</Link> to view your cart.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <section className='cart-section'>
-      <div className='cart-container'>
-        <h1>Your Cart</h1>
-        {loading && <p>Loading...</p>}
-        {error && <p className='cart-error'>{error}</p>}
-        <div className='cart-list'>
-          {cart?.items?.length && cart.items.length > 0 ? (
-            cart.items.map((item) => (
-              <div key={item.id} className='cart-item'>
-                <div className='item-info'>
-                  <div className='item-details'>
-                    <img src="/OneFifty.png" alt={item.product.title} className='item-image' />
-                    <div className='item-text'>
-                      <h3>{item.product.title}</h3>
-                      <p>{item.product.brand}</p>
-                    </div>
+    <div className="cart-page">
+      <div className="container">
+        <h1 className="page-title">Your Cart</h1>
+        {itemCount > 0 && (
+          <p className="page-subtitle">{itemCount} item{itemCount !== 1 ? "s" : ""}</p>
+        )}
+
+        {error && <p className="form-error" style={{ marginBottom: "1rem" }}>{error}</p>}
+
+        {loading ? (
+          <div className="loading-state">Loading cart…</div>
+        ) : !cart?.items?.length ? (
+          <div className="cart-empty">
+            <p className="cart-empty-msg">Your cart is empty.</p>
+            <Link to="/products" className="btn btn-primary">Browse Products</Link>
+          </div>
+        ) : (
+          <div className="cart-layout">
+            <div className="cart-items">
+              {cart.items.map(item => (
+                <div key={item.id} className="cart-item">
+                  <div className="cart-item-img">
+                    {item.product.image_url
+                      ? <img src={`/${item.product.image_url}`} alt={item.product.title} />
+                      : <div className="img-placeholder" />
+                    }
                   </div>
-                  <div className='item-price'>
-                    <div className='item-total'>Item Total: ${(parseFloat(item.product.price) * item.quantity).toFixed(2)}</div>
-                    <div className='item-qty'>Qty: {item.quantity}</div>
-                    <div className='item-unit-price'>Price per unit: ${item.product.price}</div>
+                  <div className="cart-item-info">
+                    <p className="cart-item-brand">{item.product.brand}</p>
+                    <h3 className="cart-item-title">{item.product.title}</h3>
+                    <p className="cart-item-unit">€{parseFloat(item.product.price).toFixed(2)} each</p>
+                  </div>
+                  <div className="cart-item-right">
+                    <p className="cart-item-qty">Qty: {item.quantity}</p>
+                    <p className="cart-item-subtotal">
+                      €{(parseFloat(item.product.price) * item.quantity).toFixed(2)}
+                    </p>
+                    <button
+                      className="cart-remove-btn"
+                      onClick={() => handleDelete(item.id)}
+                      disabled={deletingId === item.id}
+                    >
+                      {deletingId === item.id ? "…" : "Remove"}
+                    </button>
                   </div>
                 </div>
-                <button className='delete-btn' onClick={() => handleDelete(item.id)}>
-                  Delete
-                </button>
+              ))}
+            </div>
+
+            <aside className="cart-summary">
+              <h2 className="cart-summary-title">Order Summary</h2>
+              <div className="cart-summary-row">
+                <span>Subtotal ({itemCount} items)</span>
+                <span>€{total.toFixed(2)}</span>
               </div>
-            ))
-          ) : (
-            !loading && <p>Your cart is empty</p>
-          )}
-        </div>
-        {cart?.items?.length && cart.items.length > 0 && (
-          <div className='cart-total'>
-            <h3>Total: ${total.toFixed(2)}</h3>
-            <button className="pay-button" onClick={() => navigate('/checkout')}>Pay</button>
+              <div className="cart-summary-row">
+                <span>Delivery</span>
+                <span className="cart-free">{total >= 50 ? "Free" : "€4.99"}</span>
+              </div>
+              {total < 50 && (
+                <p className="cart-delivery-hint">
+                  Add €{(50 - total).toFixed(2)} more for free delivery
+                </p>
+              )}
+              <div className="cart-summary-total">
+                <span>Total</span>
+                <span>€{(total + (total >= 50 ? 0 : 4.99)).toFixed(2)}</span>
+              </div>
+              <button className="btn btn-primary btn-full" onClick={() => navigate("/checkout")}>
+                Proceed to Checkout
+              </button>
+              <Link to="/products" className="btn btn-outline btn-full" style={{ marginTop: "0.5rem" }}>
+                Continue Shopping
+              </Link>
+            </aside>
           </div>
         )}
       </div>
-    </section>
+    </div>
   );
 }
