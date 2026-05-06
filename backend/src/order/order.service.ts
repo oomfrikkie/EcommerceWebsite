@@ -36,11 +36,12 @@ export class OrderService{
             throw new NotFoundException('One or more products not found');
         }
 
-        // Attach products to order
+        // Attach products to order, allow status override
         const order = this.orderRepo.create({
             account_id: dto.account_id,
             amount: dto.amount,
             products: products,
+            status: dto.status || 'pending',
         });
         const savedOrder = await this.orderRepo.save(order);
 

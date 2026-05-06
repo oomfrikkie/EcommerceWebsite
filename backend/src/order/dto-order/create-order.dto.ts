@@ -1,6 +1,6 @@
 
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNumber, Min, ArrayNotEmpty, ValidateNested, IsArray } from 'class-validator';
+import { IsInt, IsNumber, Min, ArrayNotEmpty, ValidateNested, IsArray, IsOptional, IsIn } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class OrderProductDto {
@@ -30,4 +30,9 @@ export class CreateOrderDto {
   @ValidateNested({ each: true })
   @Type(() => OrderProductDto)
   products: OrderProductDto[];
+
+  @ApiProperty({ example: 'paid', required: false })
+  @IsOptional()
+  @IsIn(['pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled'], { message: 'status must be a valid order status' })
+  status?: string;
 }

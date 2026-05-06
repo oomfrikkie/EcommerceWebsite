@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS products (
     brand VARCHAR(255),
     description TEXT,
     price NUMERIC(10,2) NOT NULL,
+    image_url VARCHAR(500),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -140,18 +141,45 @@ INSERT INTO categories (name) VALUES
 ('Streetwear'),
 ('Shoes'),
 ('Accessories'),
-('Sale')
+('Sale'),
+('Sports')
 ON CONFLICT DO NOTHING;
 
 -- =====================================================
 -- SEED PRODUCTS
 -- =====================================================
-INSERT INTO products (title, brand, description, price) VALUES
-('Oversized Hoodie', 'UrbanWave', 'Heavy cotton oversized hoodie', 59.99),
-('Classic White Tee', 'UrbanWave', 'Essential everyday t-shirt', 19.99),
-('Slim Fit Jeans', 'DenimCo', 'Dark wash slim fit jeans', 79.99),
-('Leather Sneakers', 'StepUp', 'Premium leather sneakers', 129.99),
-('Baseball Cap', 'UrbanWave', 'Adjustable streetwear cap', 24.99);
+INSERT INTO products (title, brand, description, price, image_url) VALUES
+('Oversized Hoodie', 'UrbanWave', 'Heavy cotton oversized hoodie', 59.99, 'OneFifty.png'),
+('Classic White Tee', 'UrbanWave', 'Essential everyday t-shirt', 19.99, 'OneFifty.png'),
+('Slim Fit Jeans', 'DenimCo', 'Dark wash slim fit jeans', 79.99, 'OneFifty.png'),
+('Leather Sneakers', 'StepUp', 'Premium leather sneakers', 129.99, 'leathersneakers.png'),
+('Baseball Cap', 'UrbanWave', 'Adjustable streetwear cap', 24.99, 'OneFifty.png');
+
+-- Additional Products
+-- Sports Products
+INSERT INTO products (title, brand, description, price, image_url) VALUES
+('Running Shorts', 'ActivePro', 'Lightweight running shorts for training', 34.99, 'runningshorts.png'),
+('Yoga Mat', 'FlexFit', 'Non-slip yoga mat for all levels', 29.99, 'yogamat.png'),
+('Basketball', 'ProPlay', 'Official size and weight basketball', 39.99, 'basketball.png'),
+('Sports Water Bottle', 'HydroMax', 'Insulated stainless steel water bottle', 22.99, 'OneFifty.png'),
+('Gym Duffel Bag', 'CarryAll', 'Spacious duffel bag for gym and travel', 44.99, 'OneFifty.png');
+INSERT INTO products (title, brand, description, price, image_url) VALUES
+('Graphic Print Tee', 'StreetArt', 'Bold graphic print t-shirt', 29.99, 'OneFifty.png'),
+('Cargo Joggers', 'UrbanWave', 'Utility cargo jogger pants', 69.99, 'OneFifty.png'),
+('Chunky Sneakers', 'StepUp', 'Chunky sole fashion sneakers', 109.99, 'chunkysneakers.png'),
+('Denim Jacket', 'DenimCo', 'Classic blue denim jacket', 89.99, 'OneFifty.png'),
+('Beanie Hat', 'UrbanWave', 'Soft knit beanie for winter', 14.99, 'OneFifty.png'),
+('Crossbody Bag', 'CarryAll', 'Compact crossbody street bag', 39.99, 'OneFifty.png'),
+('Socks 3-Pack', 'UrbanWave', 'Comfort cotton socks (3 pairs)', 12.99, 'OneFifty.png'),
+('Windbreaker', 'UrbanWave', 'Lightweight windbreaker jacket', 54.99, 'OneFifty.png'),
+('Bucket Hat', 'UrbanWave', 'Trendy bucket hat', 19.99, 'OneFifty.png'),
+('High-Top Sneakers', 'StepUp', 'Retro high-top sneakers', 119.99, 'hightopsneakers.png'),
+('Faux Leather Belt', 'UrbanWave', 'Adjustable faux leather belt', 17.99, 'OneFifty.png'),
+('Tie-Dye Hoodie', 'StreetArt', 'Colorful tie-dye hoodie', 64.99, 'OneFifty.png'),
+('Ripped Skinny Jeans', 'DenimCo', 'Distressed skinny jeans', 84.99, 'OneFifty.png'),
+('Canvas Tote Bag', 'CarryAll', 'Reusable canvas tote', 15.99, 'OneFifty.png'),
+('Aviator Sunglasses', 'UrbanWave', 'Classic aviator sunglasses', 34.99, 'OneFifty.png'),
+('Sale Crew Socks', 'UrbanWave', 'Discounted crew socks', 7.99, 'OneFifty.png');
 
 -- =====================================================
 -- LINK PRODUCTS TO CATEGORIES
@@ -179,6 +207,51 @@ SELECT p.id, c.id
 FROM products p
 JOIN categories c ON c.name IN ('Shoes', 'Streetwear')
 WHERE p.title = 'Leather Sneakers';
+
+-- Category links for new products
+-- Sports category links
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Sports' WHERE p.title = 'Running Shorts';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Sports' WHERE p.title = 'Yoga Mat';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Sports' WHERE p.title = 'Basketball';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Sports' WHERE p.title = 'Sports Water Bottle';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Sports' WHERE p.title = 'Gym Duffel Bag';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Clothing' WHERE p.title = 'Graphic Print Tee';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name IN ('Clothing', 'Streetwear') WHERE p.title = 'Cargo Joggers';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Shoes' WHERE p.title = 'Chunky Sneakers';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Clothing' WHERE p.title = 'Denim Jacket';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Accessories' WHERE p.title = 'Beanie Hat';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Accessories' WHERE p.title = 'Crossbody Bag';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Accessories' WHERE p.title = 'Socks 3-Pack';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Clothing' WHERE p.title = 'Windbreaker';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Accessories' WHERE p.title = 'Bucket Hat';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Shoes' WHERE p.title = 'High-Top Sneakers';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Accessories' WHERE p.title = 'Faux Leather Belt';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name IN ('Clothing', 'Streetwear') WHERE p.title = 'Tie-Dye Hoodie';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Clothing' WHERE p.title = 'Ripped Skinny Jeans';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Accessories' WHERE p.title = 'Canvas Tote Bag';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Accessories' WHERE p.title = 'Aviator Sunglasses';
+INSERT INTO product_categories (product_id, category_id)
+SELECT p.id, c.id FROM products p JOIN categories c ON c.name = 'Sale' WHERE p.title = 'Sale Crew Socks';
 
 INSERT INTO product_categories (product_id, category_id)
 SELECT p.id, c.id

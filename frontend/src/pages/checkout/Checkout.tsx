@@ -102,8 +102,10 @@ export default function Checkout() {
         product_id: item.product.id,
         quantity: item.quantity,
       })),
+      status: 'paid',
     };
 
+    console.log('Order payload:', orderPayload);
     try {
       await axios.post("http://localhost:3000/orders", orderPayload, { timeout: 5000 });
       await axios.delete(`http://localhost:3000/cart/clear/${accountId}`, { timeout: 5000 });

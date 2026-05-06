@@ -4,11 +4,12 @@ import axios from "axios"
 import "./product.css"
 
 interface Product {
-  id: number
-  title: string
-  price: number
-  brand: string
-  description: string
+  id: number;
+  title: string;
+  price: number;
+  brand: string;
+  description: string;
+  image_url?: string;
 }
 
 export default function Product() {
@@ -54,7 +55,12 @@ export default function Product() {
         {product ? (
           <>
             <div className="productPage-image">
-              <img src="/OneFifty.png" alt={product.title} />
+              <img
+                src={product.image_url ? `/${product.image_url}` : undefined}
+                alt={product.title}
+                className="product-image"
+                style={{ background: '#f8f8f8', border: '1px solid #eee' }}
+              />
             </div>
             <div className="product-details">
               <h1>{product.title}</h1>

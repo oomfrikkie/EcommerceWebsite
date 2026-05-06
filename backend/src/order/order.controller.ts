@@ -1,10 +1,13 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { UseFilters } from '@nestjs/common';
+import { ValidationExceptionFilter } from '../utils/validation-exception.filter';
 import { ApiTags } from '@nestjs/swagger';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto-order/create-order.dto';
 
 @ApiTags('Orders')
 @Controller('orders')
+@UseFilters(ValidationExceptionFilter)
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 

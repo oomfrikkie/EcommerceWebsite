@@ -12,6 +12,7 @@ interface Product {
   title: string
   brand: string
   price: number
+  image_url?: string
 }
 
 export default function ProductScroller({ category }: ProductScrollerProps) {
@@ -48,9 +49,12 @@ export default function ProductScroller({ category }: ProductScrollerProps) {
             onClick={() => navigate(`/product/${product.id}`)}
           >
             <div className="product-image-wrapper">
-              <img src="OneFifty.png" alt="" className="scroller-product-image"
-/>
-
+              <img
+                src={product.image_url ? `/${product.image_url}` : undefined}
+                alt={product.title}
+                className="product-image"
+                style={{ background: '#f8f8f8', border: '1px solid #eee' }}
+              />
             </div>
 
             <h2>{product.title}</h2>
