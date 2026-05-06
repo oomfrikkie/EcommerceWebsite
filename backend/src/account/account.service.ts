@@ -9,8 +9,6 @@ import { CreateAccountDto } from './dto-account/create-account.dto';
 import { LoginDto } from './dto-account/login.dto'; 
 
 import { AccountTokenService } from './token/account-token.service';
-import { ForgotPasswordDto } from './dto-account/forgot-password.dto';
-import { ResetPasswordDto } from './dto-account/reset-password.dto';
 
 @Injectable()
 export class AccountService {
@@ -56,7 +54,7 @@ export class AccountService {
 
   try {
     savedAccount = await this.accountRepo.save(newAccount);
-  } catch (error) {
+  } catch (_error) {
     throw new BadRequestException(
       'Failed to create account. Please try again later.',
     );
@@ -117,7 +115,7 @@ export class AccountService {
   email: existing.email,
 };
 
-    } catch (error) {
+    } catch (_error) {
       throw new BadRequestException('Login succeeded but failed to update account state.',);
     }
   }

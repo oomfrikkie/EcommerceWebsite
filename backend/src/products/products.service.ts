@@ -52,7 +52,7 @@ constructor(
 
         try {
             return await this.productRepo.save(product);
-        } catch (error) {
+        } catch (_error) {
             throw new BadRequestException('Failed to create product');
         }
     }

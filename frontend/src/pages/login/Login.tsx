@@ -30,9 +30,9 @@ export default function Login() {
       
 
       navigate("/home");
-    } catch (err: any) {
+    } catch (err) {
       console.error(err);
-      setError(err.response?.data?.message || "Login failed");
+      setError(axios.isAxiosError(err) ? (err.response?.data?.message ?? "Login failed") : "Login failed");
     } finally {
       setLoading(false);
     }

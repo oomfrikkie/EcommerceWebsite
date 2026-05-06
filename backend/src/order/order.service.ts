@@ -71,7 +71,8 @@ export class OrderService{
             });
             this.logger.log(`Order confirmation email sent: ${emailSent}`);
         } catch (error) {
-            this.logger.error(`Failed to send order confirmation email: ${error.message}`, error.stack);
+            const err = error as Error;
+            this.logger.error(`Failed to send order confirmation email: ${err.message}`, err.stack);
         }
 
         return {

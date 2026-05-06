@@ -2,10 +2,7 @@ import { Controller, Post, Body, Get, Param } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { CreateAccountDto } from './dto-account/create-account.dto';
 import { LoginDto } from './dto-account/login.dto';
-import { ForgotPasswordDto } from './dto-account/forgot-password.dto';
-import { ResetPasswordDto } from './dto-account/reset-password.dto';
 import { AccountTokenService } from './token/account-token.service';
-import { BSON } from 'typeorm';
 
 @Controller('account')
 export class AccountController{

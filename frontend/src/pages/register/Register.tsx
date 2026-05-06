@@ -39,8 +39,8 @@ export default function Register() {
 
       // ✅ redirect to verify page with token
       navigate(`/verify/${data.verification_token}`);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Registration failed");
     } finally {
       setLoading(false);
     }

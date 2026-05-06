@@ -16,13 +16,12 @@ export default function SearchBar() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (query.trim().length < 2) {
-      setResults([])
-      setShowDropdown(false)
-      return
-    }
-
     const fetchResults = async () => {
+      if (query.trim().length < 2) {
+        setResults([])
+        setShowDropdown(false)
+        return
+      }
       try {
         const res = await axios.get(
           "http://localhost:3000/products/title",

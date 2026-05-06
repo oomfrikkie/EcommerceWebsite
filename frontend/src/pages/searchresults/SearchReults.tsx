@@ -17,24 +17,17 @@ export default function SearchResults() {
 
   const title = searchParams.get("title")
 
-  const getSearchResults = async (searchParam: string) => {
-    try {
-      const res = await axios.get(
-        "http://localhost:3000/products/title",
-        {
-          params: { title: searchParam }
-        }
-      )
-      setProducts(res.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   useEffect(() => {
-    if (title) {
-      getSearchResults(title)
+    if (!title) return
+    const fetch = async () => {
+      try {
+        const res = await axios.get("http://localhost:3000/products/title", { params: { title } })
+        setProducts(res.data)
+      } catch (error) {
+        console.error(error)
+      }
     }
+    fetch()
   }, [title])
 
   return (

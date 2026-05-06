@@ -16,8 +16,8 @@ export default function VerifyAccount() {
     try {
       await axios.get(`http://localhost:3000/account/verify/${token}`);
       navigate("/login");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Verification failed");
+    } catch (err) {
+      setError(axios.isAxiosError(err) ? (err.response?.data?.message ?? "Verification failed") : "Verification failed");
     } finally {
       setLoading(false);
     }

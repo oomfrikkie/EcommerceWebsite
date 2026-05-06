@@ -1,7 +1,6 @@
 import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
 import { ProductService } from './products.service';
 import { CreateProductDto } from './dto-product/create-product.dto';
-import { BSON } from 'typeorm';
 
 @Controller('products')
 export class ProductController{

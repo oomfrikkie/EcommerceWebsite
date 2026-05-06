@@ -42,7 +42,7 @@ export class CartService {
   }
 
   
-  async addToCart(dto: AddToCartDto): Promise<any> {
+  async addToCart(dto: AddToCartDto) {
     const { accountId, productId, quantity } = dto;
 
     const cart = await this.getCart(accountId);

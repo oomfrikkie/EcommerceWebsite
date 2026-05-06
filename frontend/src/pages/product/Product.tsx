@@ -16,13 +16,6 @@ export default function Product() {
   const { id } = useParams<{ id: string }>()
   const [product, setProduct] = useState<Product>()
 
-  const fetchProduct = async (id: string) => {
-    const res = await axios.get(
-      `http://localhost:3000/products/${id}`
-    )
-    setProduct(res.data)
-  }
-
   const addToCart = async () => {
     const accountId = sessionStorage.getItem("account_id");
     if (!accountId) {
@@ -46,7 +39,12 @@ export default function Product() {
   };
 
   useEffect(() => {
-    if (id) fetchProduct(id)
+    if (!id) return
+    const load = async () => {
+      const res = await axios.get(`http://localhost:3000/products/${id}`)
+      setProduct(res.data)
+    }
+    load()
   }, [id])
 
   return (
