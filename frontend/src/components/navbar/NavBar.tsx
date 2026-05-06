@@ -33,7 +33,8 @@ export default function NavBar() {
   }
 
   useEffect(() => {
-    fetchCartCount()
+    const init = async () => { await fetchCartCount() }
+    init()
 
     const handleCartUpdate = () => {
       fetchCartCount()

@@ -38,7 +38,7 @@ export default function Chat() {
       })
 
       setMessages((prev) => [...prev, { text: res.data.response, sender: "bot" }])
-    } catch (error) {
+    } catch {
       setMessages((prev) => [
         ...prev,
         { text: "Sorry, I couldn't process your request. Please try again.", sender: "bot" },

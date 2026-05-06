@@ -34,7 +34,8 @@ export default function ProductScroller({ category }: ProductScrollerProps) {
   }
 
   useEffect(() => {
-    productsPerCategory(category)
+    const load = async () => { await productsPerCategory(category) }
+    load()
   }, [category])
 
   return (
