@@ -11,22 +11,14 @@ export default function NavBar() {
   const fetchCartCount = async () => {
     const accountId = sessionStorage.getItem("account_id")
     setLogged(!!accountId)
-
-    if (!accountId) {
-      setCartCount(0)
-      return
-    }
-
+    if (!accountId) { setCartCount(0); return }
     try {
       const res = await axios.get(`http://localhost:3000/cart/${accountId}`)
       const items = Array.isArray(res.data?.items) ? res.data.items : []
-
-      const totalQuantity = items.reduce(
-        (sum: number, item: { quantity?: number }) => sum + (item.quantity ?? 0),
-        0
+      const total = items.reduce(
+        (sum: number, item: { quantity?: number }) => sum + (item.quantity ?? 0), 0
       )
-
-      setCartCount(totalQuantity)
+      setCartCount(total)
     } catch (error) {
       console.error(error)
     }
@@ -35,46 +27,46 @@ export default function NavBar() {
   useEffect(() => {
     const init = async () => { await fetchCartCount() }
     init()
-
-    const handleCartUpdate = () => {
-      fetchCartCount()
-    }
-
-    window.addEventListener("cart:updated", handleCartUpdate)
-    const intervalId = setInterval(fetchCartCount, 5000)
-
+    const onCart = () => { fetchCartCount() }
+    const onAuth = () => { fetchCartCount() }
+    window.addEventListener("cart:updated", onCart)
+    window.addEventListener("auth:updated", onAuth)
+    const id = setInterval(fetchCartCount, 6000)
     return () => {
-      window.removeEventListener("cart:updated", handleCartUpdate)
-      clearInterval(intervalId)
+      window.removeEventListener("cart:updated", onCart)
+      window.removeEventListener("auth:updated", onAuth)
+      clearInterval(id)
     }
   }, [])
 
+  const close = () => setMenuOpen(false)
+
   return (
-    <section className="nav-container">
+    <>
       <button
-        className="hamburger"
-        onClick={() => setMenuOpen(!menuOpen)}
+        className={`hamburger ${menuOpen ? "is-open" : ""}`}
+        onClick={() => setMenuOpen(v => !v)}
+        aria-label="Toggle menu"
       >
-        ☰
+        <span className="hline" />
+        <span className="hline" />
+        <span className="hline" />
       </button>
 
-      <nav className={`nav-links ${menuOpen ? "open" : ""}`}>
-        <NavLink to="/home" onClick={() => setMenuOpen(false)}>Home</NavLink>
-        <NavLink to="/products" onClick={() => setMenuOpen(false)}>Products</NavLink>
-
-        {logged ? (
-          <NavLink to="/account" onClick={() => setMenuOpen(false)}>Account</NavLink>
-        ) : (
-          <NavLink to="/login" onClick={() => setMenuOpen(false)}>Login</NavLink>
-        )}
-
-        <NavLink to="/cart" className="cart-link" onClick={() => setMenuOpen(false)}>
-          <img src="/cart.svg" alt="Cart" className="cart-icons" />
-          {cartCount > 0 && (
-            <span className="cart-badge">{cartCount}</span>
-          )}
+      <nav className={`nav ${menuOpen ? "is-open" : ""}`}>
+        <NavLink to="/home" className="nav-link" onClick={close}>Home</NavLink>
+        <NavLink to="/products" className="nav-link" onClick={close}>Products</NavLink>
+        {logged
+          ? <NavLink to="/account" className="nav-link" onClick={close}>Account</NavLink>
+          : <NavLink to="/login" className="nav-link" onClick={close}>Login</NavLink>
+        }
+        <NavLink to="/cart" className="nav-link nav-cart" onClick={close}>
+          Cart
+          {cartCount > 0 && <span className="nav-badge">{cartCount}</span>}
         </NavLink>
       </nav>
-    </section>
+
+      {menuOpen && <div className="nav-backdrop" onClick={close} />}
+    </>
   )
 }
