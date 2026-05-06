@@ -1,52 +1,80 @@
 import { useEffect, useState } from "react"
 import { useSearchParams, useNavigate } from "react-router-dom"
 import axios from "axios"
-import './searchresults.css'
+import "./searchresults.css"
 
 interface Product {
   id: number
   title: string
   brand: string
   price: number
+  image_url?: string
 }
 
 export default function SearchResults() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
 
-  const title = searchParams.get("title")
+  const title = searchParams.get("title") ?? ""
 
   useEffect(() => {
-    if (!title) return
-    const fetch = async () => {
+    if (!title) { setLoading(false); return }
+    const load = async () => {
+      setLoading(true)
       try {
         const res = await axios.get("http://localhost:3000/products/title", { params: { title } })
         setProducts(res.data)
       } catch (error) {
         console.error(error)
+      } finally {
+        setLoading(false)
       }
     }
-    fetch()
+    load()
   }, [title])
 
   return (
-    <section className="search-results-section">
-      <h2>Search results for "{title}"</h2>
+    <div className="search-page">
+      <div className="container">
+        <h1 className="page-title">
+          {title ? `Results for "${title}"` : "Search"}
+        </h1>
+        <p className="page-subtitle">
+          {loading ? "Searching…" : `${products.length} product${products.length !== 1 ? "s" : ""} found`}
+        </p>
 
-      <div className="search-results-container">
-        {products.map(product => (
-          <div
-            key={product.id}
-            className="product-card"
-            onClick={() => navigate(`/product/${product.id}`)}
-          >
-            <img src="OneFifty.png" alt="" className="scroller-product-image"/>
-            <h2>{product.title}</h2>
-            <p>€{product.price}</p>
+        {loading ? (
+          <div className="loading-state">Searching…</div>
+        ) : products.length === 0 ? (
+          <div className="empty-state">
+            <p>No products found for "{title}".</p>
+            <p style={{ marginTop: "0.5rem", fontSize: "0.9rem" }}>Try a different search term.</p>
           </div>
-      ))}
+        ) : (
+          <div className="search-grid">
+            {products.map(product => (
+              <div
+                key={product.id}
+                className="product-tile"
+                onClick={() => navigate(`/product/${product.id}`)}
+              >
+                <div className="product-tile-img">
+                  {product.image_url && (
+                    <img src={`/${product.image_url}`} alt={product.title} />
+                  )}
+                </div>
+                <div className="product-tile-body">
+                  <p className="product-tile-brand">{product.brand}</p>
+                  <h3 className="product-tile-title">{product.title}</h3>
+                  <p className="product-tile-price">€{Number(product.price).toFixed(2)}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
-    </section>
+    </div>
   )
 }
