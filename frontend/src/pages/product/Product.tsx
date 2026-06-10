@@ -2,6 +2,7 @@ import { useParams, Link } from "react-router-dom"
 import { useState, useEffect } from "react"
 import axios from "axios"
 import "./product.css"
+import { API_BASE_URL } from "../../config"
 
 interface Product {
   id: number;
@@ -21,7 +22,7 @@ export default function Product() {
   useEffect(() => {
     if (!id) return
     const load = async () => {
-      const res = await axios.get(`http://localhost:3000/products/${id}`)
+      const res = await axios.get(`${API_BASE_URL}/products/${id}`)
       setProduct(res.data)
       setLoading(false)
     }
@@ -33,7 +34,7 @@ export default function Product() {
     if (!accountId) { alert("Please log in to add items to cart"); return }
     if (!product) return
     try {
-      await axios.post("http://localhost:3000/cart/add", {
+      await axios.post(`${API_BASE_URL}/cart/add`, {
         accountId: Number(accountId),
         productId: product.id,
         quantity: 1,

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import "./searchbar.css"
+import { API_BASE_URL } from "../../config"
 
 interface Product {
   id: number
@@ -25,7 +26,7 @@ export default function SearchBar() {
       }
       try {
         const res = await axios.get(
-          "http://localhost:3000/products/title",
+          `${API_BASE_URL}/products/title`,
           { params: { title: query } }
         )
         setResults(res.data.slice(0, 5))

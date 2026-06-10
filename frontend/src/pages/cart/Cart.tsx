@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import "./cart.css";
+import { API_BASE_URL } from "../../config";
 
 interface CartItem {
   id: number;
@@ -26,7 +27,7 @@ export default function Cart() {
   const fetchCart = async () => {
     if (!accountId) { setLoading(false); return; }
     try {
-      const res = await axios.get(`http://localhost:3000/cart/${accountId}`, { timeout: 5000 });
+      const res = await axios.get(`${API_BASE_URL}/cart/${accountId}`, { timeout: 5000 });
       setCart(res.data);
     } catch (err) {
       console.error(err);
@@ -41,7 +42,7 @@ export default function Cart() {
   const handleDelete = async (cartItemId: number) => {
     setDeletingId(cartItemId);
     try {
-      await axios.delete(`http://localhost:3000/cart/item/${cartItemId}`);
+      await axios.delete(`${API_BASE_URL}/cart/item/${cartItemId}`);
       await fetchCart();
       window.dispatchEvent(new Event("cart:updated"));
     } catch (err) {

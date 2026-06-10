@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import "./checkout.css";
+import { API_BASE_URL } from "../../config";
 
 interface CartItem {
   id: number;
@@ -32,7 +33,7 @@ export default function Checkout() {
       const accountId = sessionStorage.getItem("account_id");
       if (!accountId) { setLoading(false); return; }
       try {
-        const res = await axios.get(`http://localhost:3000/cart/${accountId}`, { timeout: 5000 });
+        const res = await axios.get(`${API_BASE_URL}/cart/${accountId}`, { timeout: 5000 });
         setCart(res.data);
       } catch (err) {
         console.error(err);
@@ -60,13 +61,13 @@ export default function Checkout() {
     setError("");
     setSubmitting(true);
     try {
-      await axios.post("http://localhost:3000/orders", {
+      await axios.post(`${API_BASE_URL}/orders`, {
         account_id: parseInt(accountId, 10),
         amount: total,
         products: cart.items.map(item => ({ product_id: item.product.id, quantity: item.quantity })),
         status: "paid",
       }, { timeout: 8000 });
-      await axios.delete(`http://localhost:3000/cart/clear/${accountId}`, { timeout: 5000 });
+      await axios.delete(`${API_BASE_URL}/cart/clear/${accountId}`, { timeout: 5000 });
       window.dispatchEvent(new Event("cart:updated"));
       navigate("/account");
     } catch (err) {

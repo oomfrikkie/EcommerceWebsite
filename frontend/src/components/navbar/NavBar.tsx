@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom"
 import "./navbar.css"
 import { useEffect, useState } from "react"
 import axios from "axios"
+import { API_BASE_URL } from "../../config"
 
 export default function NavBar() {
   const [logged, setLogged] = useState(false)
@@ -13,7 +14,7 @@ export default function NavBar() {
     setLogged(!!accountId)
     if (!accountId) { setCartCount(0); return }
     try {
-      const res = await axios.get(`http://localhost:3000/cart/${accountId}`)
+      const res = await axios.get(`${API_BASE_URL}/cart/${accountId}`)
       const items = Array.isArray(res.data?.items) ? res.data.items : []
       const total = items.reduce(
         (sum: number, item: { quantity?: number }) => sum + (item.quantity ?? 0), 0

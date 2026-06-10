@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import "./chat.css"
 import axios from "axios"
+import { API_BASE_URL } from "../../config"
 
 interface Message {
   text: string
@@ -32,7 +33,7 @@ export default function Chat() {
 
     try {
       const accountId = sessionStorage.getItem("account_id")
-      const res = await axios.post("http://localhost:3000/chat", {
+      const res = await axios.post(`${API_BASE_URL}/chat`, {
         message: userMessage,
         accountId: accountId ? parseInt(accountId, 10) : undefined,
       })

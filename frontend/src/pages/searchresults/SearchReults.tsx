@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useSearchParams, useNavigate } from "react-router-dom"
 import axios from "axios"
 import "./searchresults.css"
+import { API_BASE_URL } from "../../config"
 
 interface Product {
   id: number
@@ -24,7 +25,7 @@ export default function SearchResults() {
     const load = async () => {
       setLoading(true)
       try {
-        const res = await axios.get("http://localhost:3000/products/title", { params: { title } })
+        const res = await axios.get(`${API_BASE_URL}/products/title`, { params: { title } })
         setProducts(res.data)
       } catch (error) {
         console.error(error)

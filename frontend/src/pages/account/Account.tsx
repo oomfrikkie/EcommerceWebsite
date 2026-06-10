@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 import "./account.css";
+import { API_BASE_URL } from "../../config";
 
 interface Account {
   id: number;
@@ -38,7 +39,7 @@ export default function Account() {
 
     const fetchAccount = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/account/${accountId}`);
+        const res = await axios.get(`${API_BASE_URL}/account/${accountId}`);
         setAccount(res.data);
       } catch (err) {
         console.error(err);
@@ -49,7 +50,7 @@ export default function Account() {
 
     const fetchOrders = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/orders/account/${accountId}`);
+        const res = await axios.get(`${API_BASE_URL}/orders/account/${accountId}`);
         setOrders(res.data);
       } catch (err) {
         console.error(err);

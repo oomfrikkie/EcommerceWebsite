@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./products.css";
+import { API_BASE_URL } from "../../config";
 
 interface Product {
   id: number;
@@ -28,9 +29,9 @@ export default function Products() {
       try {
         let res;
         if (activeCategory === "All") {
-          res = await axios.get("http://localhost:3000/products");
+          res = await axios.get(`${API_BASE_URL}/products`);
         } else {
-          res = await axios.get("http://localhost:3000/products/category/by-name", {
+          res = await axios.get(`${API_BASE_URL}/products/category/by-name`, {
             params: { name: activeCategory },
           });
         }

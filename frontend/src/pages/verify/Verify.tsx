@@ -2,6 +2,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 import "./verify.css";
+import { API_BASE_URL } from "../../config";
 
 export default function VerifyAccount() {
   const { token } = useParams();
@@ -14,7 +15,7 @@ export default function VerifyAccount() {
     setLoading(true);
     setError("");
     try {
-      await axios.get(`http://localhost:3000/account/verify/${token}`);
+      await axios.get(`${API_BASE_URL}/account/verify/${token}`);
       setDone(true);
       setTimeout(() => navigate("/login"), 2500);
     } catch (err) {

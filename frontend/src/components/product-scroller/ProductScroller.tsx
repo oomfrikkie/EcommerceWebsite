@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import "./productscroller.css"
+import { API_BASE_URL } from "../../config"
 
 type ProductScrollerProps = { category: string }
 
@@ -20,7 +21,7 @@ export default function ProductScroller({ category }: ProductScrollerProps) {
   useEffect(() => {
     const productsPerCategory = async (cat: string) => {
       try {
-        const res = await axios.get("http://localhost:3000/products/category/by-name", {
+        const res = await axios.get(`${API_BASE_URL}/products/category/by-name`, {
           params: { name: cat },
         })
         setProducts(res.data)

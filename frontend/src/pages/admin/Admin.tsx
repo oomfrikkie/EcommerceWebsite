@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import "./admin.css";
+import { API_BASE_URL } from "../../config";
 
 const ORDER_STATUSES = [
     "pending",
@@ -40,8 +41,6 @@ const EMPTY_PRODUCT: ProductForm = {
 };
 
 type Tab = "orders" | "products";
-
-const API_BASE_URL = "http://localhost:3000";
 
 export default function Admin() {
     const [activeTab, setActiveTab] = useState<Tab>("orders");

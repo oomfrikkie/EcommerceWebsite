@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./login.css";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../../config";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ export default function Login() {
     setError("");
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:3000/account/login", { email, password });
+      const res = await axios.post(`${API_BASE_URL}/account/login`, { email, password });
       sessionStorage.setItem("account_id", String(res.data.account_id));
       sessionStorage.setItem("email", res.data.email);
       window.dispatchEvent(new Event("auth:updated"));
