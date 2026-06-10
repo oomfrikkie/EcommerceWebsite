@@ -59,7 +59,7 @@ export default function Chat() {
       {isOpen && (
         <div className="chat-window">
           <div className="chat-header">
-            <span>Order Assistant</span>
+            <span>Shop Assistant</span>
             <button className="close-btn" onClick={() => setIsOpen(false)}>
               ×
             </button>
@@ -67,10 +67,11 @@ export default function Chat() {
           <div className="chat-messages">
             {messages.length === 0 ? (
               <p className="placeholder">
-                Hi! I can help you with order information. Try asking:
+                Hi! I can help with orders and products. Try asking:
                 <br /><br />
                 "Status of order 123"<br />
-                "My orders"
+                "My orders"<br />
+                "Do you sell headphones?"
               </p>
             ) : (
               messages.map((msg, idx) => (

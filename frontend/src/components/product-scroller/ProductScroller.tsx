@@ -18,22 +18,18 @@ export default function ProductScroller({ category }: ProductScrollerProps) {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const load = async () => {
-      await productsPerCategory(category)
+    const productsPerCategory = async (cat: string) => {
+      try {
+        const res = await axios.get("http://localhost:3000/products/category/by-name", {
+          params: { name: cat },
+        })
+        setProducts(res.data)
+      } catch (error) {
+        console.error(error)
+      }
     }
-    load()
+    productsPerCategory(category)
   }, [category])
-
-  const productsPerCategory = async (cat: string) => {
-    try {
-      const res = await axios.get("http://localhost:3000/products/category/by-name", {
-        params: { name: cat },
-      })
-      setProducts(res.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
 
   if (products.length === 0) {
     return <p className="empty-state">No products found in {category}.</p>
