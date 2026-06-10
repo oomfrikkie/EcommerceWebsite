@@ -115,5 +115,14 @@ async getAllOrders() {
         }
         return order;
     }
-  
+
+    async updateOrderStatus(id: number, status: string) {
+        const order = await this.orderRepo.findOne({ where: { id } });
+        if (!order) {
+            throw new NotFoundException('Order not found');
+        }
+        order.status = status;
+        return this.orderRepo.save(order);
+    }
+
 }
