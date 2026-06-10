@@ -79,6 +79,189 @@
 	color: #3f3b76;
 }
 
+.admin-success {
+	margin: 0 0 1rem;
+	padding: 0.75rem 0.9rem;
+	border-radius: 10px;
+	border: 1px solid #b9e6c9;
+	background-color: #ecfdf3;
+	color: #15803d;
+}
+
+/* ---- tab switcher ---- */
+.admin-tabs {
+	display: inline-flex;
+	gap: 0.3rem;
+	margin-bottom: 1.2rem;
+	padding: 0.3rem;
+	background: #eceaff;
+	border: 1px solid var(--admin-border);
+	border-radius: 999px;
+}
+
+.admin-tab {
+	border: none;
+	background: transparent;
+	color: var(--admin-muted);
+	font-size: 0.9rem;
+	font-weight: 700;
+	padding: 0.5rem 1.4rem;
+	border-radius: 999px;
+	cursor: pointer;
+	transition: background 0.15s ease, color 0.15s ease;
+}
+
+.admin-tab:hover:not(.active) {
+	color: var(--admin-accent-dark);
+}
+
+.admin-tab.active {
+	background: linear-gradient(180deg, var(--admin-accent), var(--admin-accent-dark));
+	color: #fff;
+	box-shadow: 0 6px 16px rgba(79, 70, 229, 0.28);
+}
+
+/* ---- status dropdown ---- */
+.admin-status-select {
+	appearance: none;
+	border: 1px solid var(--admin-border);
+	border-radius: 999px;
+	padding: 0.4rem 1.8rem 0.4rem 0.85rem;
+	font-size: 0.84rem;
+	font-weight: 700;
+	color: var(--admin-heading);
+	background-color: #fff;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235f5a84' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 0.6rem center;
+	cursor: pointer;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.admin-status-select:hover:not(:disabled) {
+	border-color: var(--admin-accent);
+}
+
+.admin-status-select:disabled {
+	opacity: 0.6;
+	cursor: wait;
+}
+
+/* status-specific accents */
+.admin-status-select.status-pending {
+	color: #b45309;
+	border-color: #fcd9a3;
+	background-color: #fffaf0;
+}
+.admin-status-select.status-paid {
+	color: #1d4ed8;
+	border-color: #bfd2ff;
+	background-color: #f3f7ff;
+}
+.admin-status-select.status-processing {
+	color: #6d28d9;
+	border-color: #d8c7ff;
+	background-color: #f8f4ff;
+}
+.admin-status-select.status-shipped {
+	color: #0369a1;
+	border-color: #b6e2f5;
+	background-color: #f0faff;
+}
+.admin-status-select.status-delivered {
+	color: #15803d;
+	border-color: #b9e6c9;
+	background-color: #f0fdf4;
+}
+.admin-status-select.status-cancelled {
+	color: #b91c1c;
+	border-color: #f3c4c4;
+	background-color: #fef2f2;
+}
+
+/* ---- add-product panel + form ---- */
+.admin-panel-card {
+	background: var(--admin-panel);
+	border: 1px solid var(--admin-border);
+	border-radius: 14px;
+	box-shadow: var(--admin-shadow);
+	padding: 1.6rem clamp(1rem, 2vw, 1.8rem);
+}
+
+.admin-panel-title {
+	margin: 0 0 1.2rem;
+	font-size: 1.3rem;
+	color: var(--admin-heading);
+}
+
+.admin-form {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 1rem 1.2rem;
+}
+
+.admin-field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+
+.admin-field-full {
+	grid-column: 1 / -1;
+}
+
+.admin-field label {
+	font-size: 0.84rem;
+	font-weight: 700;
+	color: var(--admin-muted);
+}
+
+.admin-field input,
+.admin-field textarea {
+	border: 1px solid var(--admin-border);
+	border-radius: 10px;
+	padding: 0.6rem 0.8rem;
+	font: inherit;
+	color: var(--admin-heading);
+	background: #fff;
+	resize: vertical;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.admin-field input:focus,
+.admin-field textarea:focus {
+	outline: none;
+	border-color: var(--admin-accent);
+	box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.admin-field-hint {
+	font-size: 0.75rem;
+	color: var(--admin-muted);
+}
+
+.admin-submit-btn {
+	border: none;
+	border-radius: 999px;
+	padding: 0.65rem 1.6rem;
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: #fff;
+	background: linear-gradient(180deg, var(--admin-accent), var(--admin-accent-dark));
+	cursor: pointer;
+	transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.admin-submit-btn:hover:not(:disabled) {
+	filter: brightness(1.08);
+	transform: translateY(-1px);
+}
+
+.admin-submit-btn:disabled {
+	opacity: 0.7;
+	cursor: wait;
+}
+
 .admin-table-wrapper {
 	overflow-x: auto;
 	background: var(--admin-panel);
@@ -157,5 +340,9 @@
 
 	.admin-table {
 		min-width: 520px;
+	}
+
+	.admin-form {
+		grid-template-columns: 1fr;
 	}
 }

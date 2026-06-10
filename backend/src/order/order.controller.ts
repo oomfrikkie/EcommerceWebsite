@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Param } from '@nestjs/common';
 import { UseFilters } from '@nestjs/common';
 import { ValidationExceptionFilter } from '../utils/validation-exception.filter';
 import { ApiTags } from '@nestjs/swagger';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto-order/create-order.dto';
+import { UpdateOrderStatusDto } from './dto-order/update-order-status.dto';
 
 @ApiTags('Orders')
 @Controller('orders')
@@ -29,5 +30,10 @@ export class OrderController {
   @Get(':id')
   findOne(@Param('id') id: number) {
     return this.orderService.getOrderById(Number(id));
+  }
+
+  @Patch(':id/status')
+  updateStatus(@Param('id') id: number, @Body() dto: UpdateOrderStatusDto) {
+    return this.orderService.updateOrderStatus(Number(id), dto.status);
   }
 }
