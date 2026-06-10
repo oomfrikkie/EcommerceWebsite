@@ -5,5 +5,12 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Frontend is deployed automatically via Vercel's native GitHub integration.
-# Backend is deployed automatically via Railway's native GitHub integration.
+# Frontend deploys automatically via Vercel's native GitHub integration.
+# Backend deploys automatically via Railway's native GitHub integration.
+
+jobs:
+  info:
+    name: Deployments handled by Vercel and Railway
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Frontend -> Vercel | Backend -> Railway"
