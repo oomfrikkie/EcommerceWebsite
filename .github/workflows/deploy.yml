@@ -1,52 +1,20 @@
-name: CI
+name: Deploy
 
 on:
-  push:
-    branches: [main]
-  pull_request:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
     branches: [main]
 
 jobs:
-  build-frontend:
-    name: Build Frontend
+  deploy:
+    name: Deploy to Production
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Frontend — Vercel
+        run: echo "Deploying frontend to Vercel -> https://ecommerce-website-vert-phi-10.vercel.app"
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
-
-      - name: Install dependencies
-        run: npm install
-        working-directory: ./frontend
-
-      - name: Build
-        run: npm run build
-        working-directory: ./frontend
-        env:
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
-
-  build-backend:
-    name: Build Backend
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-          cache-dependency-path: backend/package-lock.json
-
-      - name: Install dependencies
-        run: npm install
-        working-directory: ./backend
-
-      - name: Build
-        run: npm run build
-        working-directory: ./backend
+      - name: Backend — Railway
+        run: echo "Deploying backend to Railway -> https://satisfied-commitment-production-e830.up.railway.app"
