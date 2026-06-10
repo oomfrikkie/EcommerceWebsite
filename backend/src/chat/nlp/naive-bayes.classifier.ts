@@ -95,9 +95,7 @@ export class NaiveBayesClassifier {
    * Convert raw log-scores into a probability distribution that sums to 1.
    * Subtracting the max first keeps the exponentials numerically stable.
    */
-  private softmax(
-    scores: { intent: Intent; logProb: number }[],
-  ): Prediction[] {
+  private softmax(scores: { intent: Intent; logProb: number }[]): Prediction[] {
     const max = Math.max(...scores.map((s) => s.logProb));
     const exps = scores.map((s) => Math.exp(s.logProb - max));
     const sum = exps.reduce((a, b) => a + b, 0);

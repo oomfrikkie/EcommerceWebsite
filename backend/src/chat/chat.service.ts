@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Order } from '../order/order.entity';
 import { Product } from '../products/product.entity';
 import { NaiveBayesClassifier } from './nlp/naive-bayes.classifier';
-import { TRAINING_DATA, Intent } from './nlp/training-data';
+import { TRAINING_DATA } from './nlp/training-data';
 import { extractOrderId, extractProductTerm } from './nlp/entity-extractor';
 
 @Injectable()
@@ -41,7 +41,7 @@ export class ChatService implements OnModuleInit {
       return { response: this.fallbackResponse() };
     }
 
-    switch (best.intent as Intent) {
+    switch (best.intent) {
       case 'order_status':
         return this.handleOrderStatus(message);
       case 'my_orders':

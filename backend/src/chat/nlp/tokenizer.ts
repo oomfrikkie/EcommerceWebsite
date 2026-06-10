@@ -8,14 +8,16 @@
  * collapse to "ship", which lets the model treat them as the same signal.
  */
 export function tokenize(text: string): string[] {
-  return text
-    .toLowerCase()
-    // replace anything that isn't a letter or digit with a space
-    .replace(/[^a-z0-9]+/g, ' ')
-    .trim()
-    .split(/\s+/)
-    .filter((t) => t.length > 0)
-    .map(stem);
+  return (
+    text
+      .toLowerCase()
+      // replace anything that isn't a letter or digit with a space
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim()
+      .split(/\s+/)
+      .filter((t) => t.length > 0)
+      .map(stem)
+  );
 }
 
 /**
