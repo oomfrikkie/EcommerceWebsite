@@ -7,6 +7,7 @@ interface Product {
   id: number
   title: string
   price: number
+  image_url?: string
 }
 
 export default function SearchBar() {
@@ -69,9 +70,12 @@ export default function SearchBar() {
               }}
             >
               <img
-                src="/OneFifty.png"
-                alt=""
+                src={product.image_url ? `/${product.image_url}` : "/OneFifty.png"}
+                alt={product.title}
                 className="search-dropdown-image"
+                onError={(e) => {
+                  e.currentTarget.src = "/OneFifty.png"
+                }}
               />
               <span>{product.title}</span>
             </div>
