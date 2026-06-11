@@ -97,12 +97,25 @@ export class AccountService {
       throw new BadRequestException("Account is not verified...");
     }
 
-    const match = await bcrypt.compare(dto.password, existing.password_hash);
+    if (!existing.password_hash) {
+      throw new BadRequestException('Password was incorrect..');
+    }
 
-    if (!match){
+    let match: boolean;
+    try {
+      match = await bcrypt.compare(dto.password, existing.password_hash);
+    } catch {
+      throw new BadRequestException('Password was incorrect..');
+    }
+
+    if (!match) {
       existing.failed_login_attempts += 1;
-      await this.accountRepo.save(existing);
-      throw new BadRequestException("Password was incorrect..");
+      try {
+        await this.accountRepo.save(existing);
+      } catch {
+        // non-critical, ignore save failure
+      }
+      throw new BadRequestException('Password was incorrect..');
     }
 
       try {
